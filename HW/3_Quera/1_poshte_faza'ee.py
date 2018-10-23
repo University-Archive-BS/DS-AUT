@@ -19,30 +19,32 @@ main_stack = Stack()
 min_stack = Stack()
 
 q = int(input())
-commands = [''] * q
+command = [''] * q
 
 for i in range(q):
-    commands[i] = input()
+    command[i] = input()
 
 for j in range(q):
-    if commands[j].__contains__("push"):
-        push_array = commands[j].split()
-        main_stack.push(push_array[1])
+    if command[j].__contains__("push"):
+        push_array = command[j].split()
+        element_stack = push_array[1]
+        main_stack.push(element_stack)
 
         if min_stack.is_empty():
-            min_stack.push(push_array[1])
+            min_stack.push(element_stack)
         else:
             element_min = min_stack.pop()
             min_stack.push(element_min)
-            if push_array[1] < element_min:
-                min_stack.push(push_array[1])
+            if element_stack < element_min:
+                min_stack.push(element_stack)
 
-    if commands[j].__contains__("pop"):
+    if command[j].__contains__("pop"):
         element_stack = main_stack.pop()
         element_min = min_stack.pop()
         if element_min != element_stack:
             min_stack.push(element_min)
-    if commands[j].__contains__("spell"):
+
+    if command[j].__contains__("spell"):
         element_min = min_stack.pop()
         print(element_min)
         min_stack.push(element_min)
