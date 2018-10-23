@@ -35,7 +35,7 @@ for j in range(q):
         else:
             element_min = min_stack.pop()
             min_stack.push(element_min)
-            if element_stack < element_min:
+            if element_stack <= element_min:
                 min_stack.push(element_stack)
 
     if command[j].__contains__("pop"):
