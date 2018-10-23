@@ -19,10 +19,10 @@ main_stack = Stack()
 min_stack = Stack()
 
 q = int(input())
-command = [''] * q
+command = []
 
 for i in range(q):
-    command[i] = input()
+    command.append(input())
 
 for j in range(q):
     if command[j].__contains__("push"):
