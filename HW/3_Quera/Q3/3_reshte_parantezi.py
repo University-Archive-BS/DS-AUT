@@ -1,35 +1,42 @@
-def calculate_j(ii):
-    jj = ii + 1
-    temp = 0
-    while parentheses[jj] != ')':
-        temp += 1
-        jj += 1
+class Stack:
+    def __init__(self):
+        self.list = []
 
-    while temp != 0:
-        jj += 1
-        temp -= 1
+    def push(self, element):
+        self.list.append(element)
 
-    return jj
+    def pop(self):
+        return self.list.pop()
+
+    def is_empty(self):
+        if self.list.__len__() == 0:
+            return True
+        else:
+            return False
 
 
+stack_a = Stack()
+
+temp = 0
 q = int(input())
 
 parentheses = list(str(input()))
-print(parentheses.__len__())
-print(parentheses[0])
 
-beautifully = [0 for k in range(q)]
 
-i = 0
-while i < q:
-    if parentheses[i] == '(':
-        j = i + 1
-        while parentheses[j] != ')':
-            j = calculate_j(j - 1)
+beautifully = []
 
-        beautifully[i] = j - i
-        i += j
+for i in parentheses:
+    if i == '(':
+        if stack_a.is_empty():
+            temp = 0
+        else:
+            temp += 1
+        stack_a.push(i)
     else:
-        i += 1
+        temp += 1
+        stack_a.pop()
+        # if stack_a.is_empty():
+        #     temp += 1
+        beautifully.append(temp)
 
 print(max(beautifully))
