@@ -35,8 +35,6 @@ for i in parentheses:
     else:
         temp += 1
         stack_a.pop()
-        # if stack_a.is_empty():
-        #     temp += 1
         beautifully.append(temp)
 
 print(max(beautifully))
