@@ -2,7 +2,7 @@ from collections import deque
 
 n, x = map(int, input().split())
 stuffs = input().split()
-stuffs.sort(reverse=True)
+stuffs.sort()
 queue = deque()
 for j in stuffs:
     queue.append(int(j))
@@ -15,14 +15,14 @@ while temp != n:
         boxes += 1
         break
 
-    tail = queue.pop()
-    head = queue.popleft()
+    tail = queue.popleft()
+    head = queue.pop()
     if head + tail <= int(x):
         boxes += 1
         temp += 2
     else:
         temp += 1
         boxes += 1
-        queue.append(tail)
+        queue.appendleft(tail)
 
 print(boxes)
