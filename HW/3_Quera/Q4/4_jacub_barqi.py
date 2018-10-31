@@ -9,6 +9,7 @@ temp = 0
 while temp != n:
     if head == tail:
         temp += 1
+        boxes += 1
     elif int(stuffs[head]) + int(stuffs[tail]) <= x:
         boxes += 1
         head += 1
@@ -21,4 +22,3 @@ while temp != n:
 
 
 print(boxes)
-
