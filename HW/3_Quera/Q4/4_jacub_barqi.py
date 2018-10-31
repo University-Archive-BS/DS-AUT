@@ -1,13 +1,18 @@
 n, x = map(int, input().split())
-stuff = input().split()
+stuffs = input().split()
+stuffs.sort()
 
-mid_sum_arr = []
-mid_sum = 0
-for i in range(n):
-    if mid_sum + int(stuff[i]) > x:
-        mid_sum_arr.append(int(mid_sum))
-        mid_sum = int(stuff[i])
+temp = 0
+tail = stuffs.__len__() - 1
+head = 0
+while head != tail:
+    if int(stuffs[head]) + int(stuffs[tail]) <= x:
+        temp += 1
+        head += 1
+        tail -= 1
     else:
-        mid_sum += int(stuff[i])
-mid_sum_arr.append(int(mid_sum))
-print(mid_sum_arr.__len__())
+        temp += 1
+        head += 1
+
+
+print(temp)
