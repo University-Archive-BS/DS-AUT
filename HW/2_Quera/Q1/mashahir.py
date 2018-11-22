@@ -6,16 +6,16 @@ command = []
 for i in range(n):
     command.append(input())
 
-maxHeap = []
-number_of_elements = 0
+my_heap = []
 
 for j in range(n):
     if command[j].__len__() == 1:
         if j < 3:
             print("No reviews yet")
         else:
-            temp = heapq.nlargest(int(number_of_elements / 3), maxHeap)
-            print(temp[temp.__len__() - 1])
+            heapq.heapify(my_heap)
+            large_ha = heapq.nlargest(int(my_heap.__len__() / 3), my_heap)
+            print(large_ha[large_ha.__len__() - 1])
     else:
-        heapq.heappush(maxHeap, int(command[j].split(" ")[1]))
-        number_of_elements += 1
+        my_heap.append(int(command[j].split(" ")[1]))
+
