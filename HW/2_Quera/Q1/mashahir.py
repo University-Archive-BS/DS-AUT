@@ -1,4 +1,16 @@
-import heapq
+class Heap:
+    def __init__(self, root):
+        self.root = root
+
+
+class Node:
+    def __init__(self, value, father=None):
+        self.value = value
+        self.father = father
+        self.right = None
+        self.left = None
+
+
 
 n = int(input())
 command = []
