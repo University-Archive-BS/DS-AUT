@@ -1,49 +1,31 @@
 class Node:
-    def __init__(self):
-        self.value = 0
-        self.count = 0
-        self.right = None
-        self.left = None
-
-    def set_value(self, value):
+    def __init__(self, value):
         self.value = value
+        self.left = None
+        self.right = None
 
 
-class BinarySearchTree:
+class BST:
     def __init__(self):
         self.root = None
 
-    def set_root(self, root):
-        self.root = root
-
-    def insert_node(self, new_node):
-        traversal_node = self.root
-        current_node = self.root
-        while traversal_node:
-            current_node = traversal_node
-            if new_node.value < traversal_node.value:
-                traversal_node.count += 1
-                traversal_node = traversal_node.left
-            else:
-                traversal_node = traversal_node.right
-        if new_node.value < current_node.value:
-            current_node.left = new_node
+    def insert(self, value):
+        if self.root is None:
+            self.root = Node(value)
         else:
-            current_node.right = new_node
+            self.insert_node(value, self.root)
 
-
-    def Kth_smallest(self, k):
-        ret = -1
-        traverse_node = self.root
-        while traverse_node:
-            if traverse_node.count == (k - 1):
-                ret = traverse_node.value
-            elif traverse_node.value < k:
-                k = k - (traverse_node.count + 1)
-                traverse_node = traverse_node.right
+    def insert_node(self, value, node):
+        if value < node.value:
+            if node.left is not None:
+                self._insert(value, node.left)
             else:
-                traverse_node = traverse_node.left
-        return ret
+                node.left = Node(value)
+        else:
+            if node.right is not None:
+                self._insert(value, node.right)
+            else:
+                node.right = Node(value)
 
 
 n = int(input())
@@ -54,24 +36,15 @@ for i in range(n):
 
 numbers = 0
 
-bst = BinarySearchTree()
+bst = BST()
 
 for j in range(n):
     if command[j].__len__() == 1:
         if j < 3:
             print("No reviews yet")
         else:
-            print(bst.root.left.value)
-            # for t in range(numbers):
-            #     print(bst.Kth_smallest(t))
-            # print(bst.Kth_smallest(numbers - int(numbers / 3)))
+            print(kth_smallest(bst.root, numbers - int(numbers / 3)))
 
     else:
-        temp_man = Node()
-        temp_man.set_value(int(command[j].split(" ")[1]))
-        if numbers == 0:
-            bst.set_root(temp_man)
-        else:
-            bst.insert_node(temp_man)
+        bst.insert(int(command[j].split(" ")[1]))
         numbers += 1
-
