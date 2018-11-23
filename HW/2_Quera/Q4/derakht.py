@@ -1,10 +1,10 @@
 from collections import deque
 
+
 class Graph:
     def __init__(self, v):
         self.v = v
         self.neighbors = deque()
-
 
     def add_neighbor(self, neighbor):
         self.neighbors.appendleft(neighbor)
@@ -101,8 +101,22 @@ nodes = [[0 for x in range(2)] for y in range(n)]
 for i in range(n):
     nodes[i][0], nodes[i][1] = map(int, input().split())
 
-# graphs = []
-#
+numbers = []
+graphs = []
+for j in range(n):
+    if not nodes[j][0] in numbers:
+        graphs.insert(nodes[j][0], Graph(nodes[j][0]))
+        numbers.append(nodes[j][0])
+
+    if not nodes[j][1] in numbers:
+        graphs.insert(nodes[j][1], Graph(nodes[j][1]))
+        numbers.append(nodes[j][1])
+
+    graphs[nodes[j][0]].add_neighbor(nodes[j][1])
+    graphs[nodes[j][1]].add_neighbor(nodes[j][0])
+
+
+
 # Graph g(n);
 # g.addEdge(0, 1);
 # g.addEdge(1, 2);
