@@ -5,7 +5,7 @@ public class mashahir_plus
 {
     public static class Node
     {
-        public int value;
+        public int value, count;
         public Node left, right;
 
         public Node(int value)
@@ -13,6 +13,7 @@ public class mashahir_plus
             this.value = value;
             left = null;
             right = null;
+            count = 0;
         }
     }
 
@@ -27,64 +28,68 @@ public class mashahir_plus
 
         public void insert(int value)
         {
-            this.root = this.insertRec(this.root, value);
-        }
-
-        public Node insertRec(Node node, int value)
-        {
-            if (node == null)
+            if (root == null)
             {
-                this.root = new Node(value);
-                return this.root;
-            }
-
-            if (value == node.value)
-            {
-                return node;
-            }
-
-            if (value < node.value)
-            {
-                node.left = this.insertRec(node.left, value);
+                root = new Node(value);
             }
             else
             {
-                node.right = this.insertRec(node.right, value);
+                insertNode(new Node(value));
             }
-            return node;
         }
 
-        public class count
+        public void insertNode(Node newNode)
         {
-            int c = 0;
-        }
-
-        void kthLargestUtil(Node node, int k, count C)
-        {
-            if (node == null || C.c >= k)
+            Node traversal_node = root;
+            Node current_node = root;
+            while (traversal_node != null)
             {
-                return;
+                current_node = traversal_node;
+                if (newNode.value < traversal_node.value)
+                {
+                    traversal_node.count++;
+                    traversal_node = traversal_node.left;
+                }
+                else
+                {
+                    traversal_node = traversal_node.right;
+                }
             }
-
-            this.kthLargestUtil(node.right, k, C);
-
-            C.c++;
-
-            if (C.c == k)
+            if (newNode.value < current_node.value)
             {
-                System.out.println(node.value);
-                return;
+                current_node.left = newNode;
             }
-
-            this.kthLargestUtil(node.left, k, C);
+            else
+            {
+                current_node.right = newNode;
+            }
         }
 
-        void kthLargest(int k)
+        public int Kth_smallest(int k)
         {
-            count c = new count();
-            this.kthLargestUtil(this.root, k, c);
+            int ret = -1;
+            Node traverse_node = root;
+            while (traverse_node != null)
+            {
+                if (traverse_node.count == (k - 1))
+                {
+                    ret = traverse_node.value;
+                    break;
+                }
+                else if (traverse_node.count < k)
+                {
+                    k = k - (traverse_node.count + 1);
+                    traverse_node = traverse_node.right;
+                }
+                else
+                {
+                    traverse_node = traverse_node.left;
+                }
+            }
+            return ret;
         }
     }
+
     public static void main(String[] args)
     {
         BinarySearchTree tree = new BinarySearchTree();
@@ -93,24 +98,19 @@ public class mashahir_plus
 
         int n = Integer.parseInt(in.nextLine());
         ArrayList<String> commands = new ArrayList<>();
-        for (int i = 0; i < n; i++)
-        {
-            commands.add(in.nextLine());
-        }
-
         int values = 0;
         for (int i = 0; i < n; i++)
         {
+            commands.add(in.nextLine());
             if (commands.get(i).length() == 1)
             {
-                if (i < 3)
+                if (values < 3)
                 {
                     System.out.println("No reviews yet");
                 }
                 else
                 {
-                    int res = (values / 3);
-                    tree.kthLargest(res);
+                    System.out.println(tree.Kth_smallest(values - values / 3 + 1));
                 }
             }
             else
@@ -118,7 +118,6 @@ public class mashahir_plus
                 tree.insert(Integer.valueOf(commands.get(i).substring(2)));
                 values++;
             }
-
         }
     }
 }
