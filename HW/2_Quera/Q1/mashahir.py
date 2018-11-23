@@ -49,25 +49,17 @@ class BST:
 n = int(input())
 command = []
 
-for i in range(n):
-    command.append(input())
-
 numbers = 0
-
 bst = BST()
 
-for j in range(n):
-    if command[j].__len__() == 1:
+for i in range(n):
+    command.append(input())
+    if command[i].__len__() == 1:
         if numbers < 3:
             print("No reviews yet")
         else:
             print(bst.Kth_smallest(numbers - int(numbers / 3) + 1))
 
     else:
-        bst.insert(int(command[j].split(" ")[1]))
+        bst.insert(int(command[i].split(" ")[1]))
         numbers += 1
-
-
-
-
-
