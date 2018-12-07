@@ -1,131 +1,108 @@
-import java.util.*;
-import java.util.stream.IntStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Scanner;
 
 public class derakht
 {
+    public static class Node
+    {
+        public int value;
+        public Node next;
+
+        public Node(int value)
+        {
+            this.value = value;
+            next = null;
+        }
+
+    }
+
     public static class Graph
     {
-        int V;
-        ArrayList<List<Integer>> adj;
+        public ArrayList<Node> nodes;
 
-        public Graph(int V)
+        public Graph(int size)
         {
-            this.V = V;
-            adj = new ArrayList<>(100000);
-        }
-
-        public void addNode(int n)
-        {
-            adj.add(n, new ArrayList<>());
-        }
-
-        public void addEdge(int v, int w)
-        {
-            adj.get(v).add(0, w);
-            adj.get(w).add(0, v);
-        }
-
-        public int longestPathLength()
-        {
-            Pair t1, t2 = new Pair();
-
-            t1 = bfs(0);
-            t2 = bfs(t1.first);
-
-            return t2.second;
-        }
-
-        public Pair bfs(int u)
-        {
-            int[] dis = new int[V];
-            Arrays.fill(dis, -1);
-
-            Queue<Integer> q = new LinkedList<>();
-            q.add(u);
-
-            dis[u] = 0;
-
-            while (q.size() != 0)
+            this.nodes = new ArrayList<>();
+            for (int i =0; i < size; i++)
             {
-                int t = q.peek();
-                q.remove();
+                this.nodes.add(null);
+            }
+        }
 
-                for (int i = 0; i < adj.get(t).size(); i++)
+        public void add(int v, int u)
+        {
+            if (nodes.get(v) == null)
+            {
+                nodes.set(v, new Node(u));
+            }
+            else
+            {
+                Node temp = nodes.get(v);
+                while (temp.next != null)
                 {
-                    int v = adj.get(t).get(i);
+                    temp = temp.next;
+                }
+                temp.next = nodes.get(u);
+            }
+        }
 
-                    if (dis[v] == -1)
+        public int[] bfs(int v)
+        {
+            boolean[] visited = new boolean[nodes.size()];
+            Arrays.fill(visited, false);
+            ArrayList<Integer> queue = new ArrayList<>();
+            int[] distance = new int[nodes.size()];
+            Arrays.fill(distance, -1);
+            visited[v] = true;
+            queue.add(v);
+            int u = 0;
+            distance[v] = 0;
+            int maximum = 0;
+            while (queue.size() != 0)
+            {
+                u = queue.get(queue.size() - 1);
+                Node element = nodes.get(u);
+                while (element != null)
+                {
+                    if (!visited[element.value])
                     {
-                        q.add(v);
-                        dis[v] = dis[t] + 1;
+                        visited[element.value] = true;
+                        queue.add(element.value);
+                        distance[element.value] = distance[u] + 1;
+
                     }
+                    element = element.next;
                 }
             }
-
-            int maxDis = 0;
-            int nodeIdx = 0;
-
-            for (int i = 0; i < V; i++)
+            for (int i = 0; i < nodes.size(); i++)
             {
-                if (dis[i] > maxDis)
+                if (distance[i] > maximum)
                 {
-                    maxDis = dis[i];
-                    nodeIdx = i;
+                    maximum = distance[i];
+                    u = i;
                 }
             }
-            return new Pair(nodeIdx, maxDis);
-        }
-
-        public class Pair
-        {
-            public int first;
-            public int second;
-
-            public Pair()
-            {
-            }
-
-            public Pair(int first, int second)
-            {
-                this.first = first;
-                this.second = second;
-            }
-
+            int[] my_return = new int[2];
+            my_return[0] = u;
+            my_return[1] = maximum;
+            return my_return;
         }
     }
 
     public static void main(String[] args)
     {
-        Scanner in = new Scanner(System.in);
+        Scanner scanner = new Scanner(System.in);
+        int n = Integer.parseInt(scanner.nextLine());
 
-        int n = Integer.parseInt(in.nextLine());
-
-        Graph derakht = new Graph(n);
-
-        ArrayList<String> commands = new ArrayList<>(n - 1);
-        int values = 0;
-        int[] numbers = new int[n];
+        Graph graph = new Graph(n);
         for (int i = 0; i < n - 1; i++)
         {
-            commands.add(in.nextLine());
-            String temp = commands.get(i);
-            if (!IntStream.of(numbers).anyMatch(x -> x == Integer.parseInt(temp.split(" ")[0])))
-            {
-                numbers[values] = Integer.parseInt(temp.split(" ")[0]);
-                derakht.addNode(numbers[values]);
-                values++;
-            }
-            if (!IntStream.of(numbers).anyMatch(x -> x == Integer.parseInt(temp.split(" ")[1])))
-            {
-                numbers[values] = Integer.parseInt(temp.split(" ")[1]);
-                derakht.addNode(numbers[values]);
-                values++;
-            }
+            String[] edges = scanner.nextLine().split(" ");
+            graph.add(Integer.parseInt(edges[0]) - 1, Integer.parseInt(edges[1]) - 1);
+            graph.add(Integer.parseInt(edges[1]) - 1, Integer.parseInt(edges[0]) - 1);
         }
-        for (int i = 0; i < n - 1; i++)
-        {
-            derakht.addEdge(Integer.parseInt(commands.get(i).split(" ")[0]), Integer.parseInt(commands.get(i).split(" ")[1]));
-        }
-        System.out.println(derakht.longestPathLength());
+        System.out.println(graph.nodes.get(3).next.value);
+        System.out.println(graph.bfs(graph.bfs(0)[0])[1]);
     }
 }
